@@ -23,17 +23,14 @@
   const importBtn = document.getElementById("importBtn");
   const importFile = document.getElementById("importFile");
 
-  // --- Load center image
-  const centerImage = new Image();
-  centerImage.src = ""; // <-- Replace with your image path
-  centerImage.onload = () => draw(); // ensure first draw includes the image
-
   // --- State
   let options = [];
-  let colors = ["#C8E6F0","#004D80"];
+  let colors = [
+    "#C8E6F0","#004D80"  ];
   let rotation = 0; // radians, current wheel rotation
   let spinning = false;
   let spinSpeed = 10; // valores mayores = más vueltas
+
 
   // --- Canvas sizing
   function resize() {
@@ -101,25 +98,21 @@
 
       // label
       ctx.save();
+      // move to center, rotate to slice center
       ctx.translate(cx, cy);
       ctx.rotate(start + slice / 2);
+      // text position
       const textX = radius * 0.66;
       ctx.fillStyle = "white";
       ctx.font = `${Math.max(12, Math.round(size * 0.045))}px Arial`;
       ctx.textAlign = "center";
       ctx.textBaseline = "middle";
 
+      // wrap long labels
       const label = options[i];
       wrapText(ctx, label, textX, 0, radius * 0.55, Math.round(size * 0.045) + 2);
       ctx.restore();
     }
-
-    // --- draw center image
-    const imgSize = radius * 0.4; // adjust size if needed
-    ctx.save();
-    ctx.translate(cx, cy);
-    ctx.drawImage(centerImage, -imgSize / 2, -imgSize / 2, imgSize, imgSize);
-    ctx.restore();
   }
 
   function wrapText(ctx, text, x, y, maxWidth, lineHeight) {
@@ -137,6 +130,7 @@
       }
     }
     lines.push(line.trim());
+    // center lines vertically
     const totalHeight = lines.length * lineHeight;
     const startY = y - totalHeight / 2 + lineHeight / 2;
     for (let i = 0; i < lines.length; i++) {
@@ -152,15 +146,26 @@
     const n = options.length;
     const slice = (2 * Math.PI) / n;
 
+    // pick a random target index
     const targetIndex = Math.floor(Math.random() * n);
+
+    // spins controlled by speed slider
     const spins = spinSpeed + Math.floor(Math.random() * 3);
-    const desiredAngleAtTop = (targetIndex + 0.5) * slice;
+
+    // desiredAngleAtTop is the angle (measured from start of wheel) that should be at the top
+    const desiredAngleAtTop = (targetIndex + 0.5) * slice; // center of target slice
+
+    // compute final absolute rotation R_final such that (-R_final mod 2pi) == desiredAngleAtTop
+    // choose k so that R_final >= rotation + minDelta
     const minDelta = spins * 2 * Math.PI;
     const twoPi = 2 * Math.PI;
+
+    // find smallest integer k satisfying: -desired + k*2pi >= rotation + minDelta
     const k = Math.ceil((rotation + minDelta + desiredAngleAtTop) / twoPi);
     const Rfinal = -desiredAngleAtTop + k * twoPi;
     const delta = Rfinal - rotation;
-    const duration = 4500 + Math.floor(Math.random() * 800);
+
+    const duration = 2500 + Math.floor(Math.random() * 900); // ms
 
     const start = performance.now();
     const startRot = rotation;
@@ -177,15 +182,28 @@
         requestAnimationFrame(animate);
       } else {
         spinning = false;
+        // compute selected index
         const angleAtTop = ((-rotation % twoPi) + twoPi) % twoPi;
         const selected = Math.floor(angleAtTop / slice) % n;
+        // mostrar modal
         const modal = document.getElementById("resultModal");
         const modalText = document.getElementById("modalText");
         modalText.textContent = options[selected];
         modal.style.display = "block";
 
-        document.getElementById("closeModal").onclick = () => { modal.style.display = "none"; };
-        window.onclick = (event) => { if (event.target === modal) modal.style.display = "none"; };
+        // cerrar modal al pulsar la X
+        document.getElementById("closeModal").onclick = () => {
+          modal.style.display = "none";
+        };
+
+        // cerrar modal al pulsar fuera del contenido
+        window.onclick = (event) => {
+          if (event.target === modal) {
+            modal.style.display = "none";
+          }
+        };
+
+
       }
     }
     requestAnimationFrame(animate);
@@ -194,7 +212,11 @@
   // --- Apply options from textarea
   function applyOptionsFromInput(saveToStorage=false) {
     const raw = optionsInput.value.split(/\r?\n/).map(s => s.trim()).filter(Boolean);
-    options = raw.length ? raw : [];
+    if (raw.length === 0) {
+      options = [];
+    } else {
+      options = raw;
+    }
     saveToLocal("ruleta.options", options);
     draw();
   }
@@ -212,7 +234,6 @@
     a.remove();
     URL.revokeObjectURL(url);
   }
-
   function handleImportFile(file) {
     const reader = new FileReader();
     reader.onload = () => {
@@ -233,17 +254,21 @@
     };
     reader.readAsText(file);
   }
+  
+
 
   // --- Events
   spinBtn.addEventListener("click", spin);
   applyBtn.addEventListener("click", () => applyOptionsFromInput(true));
 
+  // keyboard: Enter+Ctrl aplica
   optionsInput.addEventListener("keydown", (ev) => {
-    if (ev.ctrlKey && ev.key === "Enter") applyOptionsFromInput(true);
+    if (ev.ctrlKey && ev.key === "Enter") { applyOptionsFromInput(true); }
   });
 
   // initialize
   loadInitialOptions();
   resize();
+  // initial draw after fonts settle
   setTimeout(draw, 40);
 })();

@@ -3,31 +3,20 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Ruleta de Dinámicas</title>
+  <title>Ruleta del CNB</title>
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
   <header>
-    <h1>🎡 Ruleta de Dinámicas</h1>
-    <p class="hint">Escribe 1 opción por línea, pulsa <strong>Aplicar</strong> y luego <strong>Girar</strong>.</p>
+    <img src="logo.png" alt="Ruleta del CNB" class="logo-header">
   </header>
+
 
   <main class="wrap">
     <section class="left">
       <div class="canvas-wrap">
         <canvas id="wheel"></canvas>
         <div class="arrow" aria-hidden="true"></div>
-      </div>
-
-      <div class="controls">
-        <button id="spinBtn">🎲 Girar</button>
-        <label class="small">Velocidad:
-          <input id="speedRange" type="range" min="1" max="10" value="6" />
-        </label>
-        <button id="saveDefaultBtn" title="Guarda en este navegador">💾 Guardar defecto</button>
-        <button id="exportBtn" title="Exporta opciones a un fichero">⬇️ Exportar</button>
-        <input id="importFile" type="file" accept="application/json" style="display:none" />
-        <button id="importBtn" title="Importa opciones desde fichero">⬆️ Importar</button>
       </div>
 
       <p id="result" class="result" aria-live="polite"></p>
@@ -38,17 +27,10 @@
       <textarea id="optionsInput" rows="10" placeholder="Escribe una opción por línea..."></textarea>
       <div class="edit-buttons">
         <button id="applyBtn">Aplicar</button>
-        <button id="clearBtn">Limpiar</button>
       </div>
-
-      <details>
-        <summary>Instrucciones rápidas</summary>
-        <ul>
-          <li>Pulsa <strong>Aplicar</strong> para cargar las opciones.</li>
-          <li>Pulsa <strong>Girar</strong> para hacer la animación y ver el resultado.</li>
-          <li>Puedes <strong>Guardar defecto</strong> (localStorage) o exportar/importar JSON.</li>
-        </ul>
-      </details>
+      <div class="spin-button-wrapper">
+        <button id="spinBtn" class="big-spin-btn">🎲 Girar 🎲</button>
+      </div>
     </aside>
   </main>
 
@@ -57,5 +39,12 @@
   </footer>
 
   <script src="script.js"></script>
+  <div id="resultModal" class="modal">
+    <div class="modal-content">
+      <span id="closeModal" class="close">&times;</span>
+      <p id="modalText"></p>
+    </div>
+  </div>
+
 </body>
 </html>

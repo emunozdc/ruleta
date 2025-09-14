@@ -64,17 +64,36 @@ canvas#wheel{
   display:block;
 }
 
-.arrow{
-  position:absolute;
-  top:6px;
-  left:50%;
-  transform:translateX(-50%);
-  width:0;height:0;
-  border-left:18px solid transparent;
-  border-right:18px solid transparent;
-  border-bottom:28px solid var(--accent);
-  filter: drop-shadow(0 2px 6px rgba(0,0,0,0.25));
+.arrow {
+  position: absolute;
+  top: -20px; /* ajusta según el tamaño del emoji */
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 3.5rem;  /* tamaño del emoji */
+  pointer-events: none;
 }
+
+.arrow::after {
+  content: "👇🏽";  /* reemplaza por el emoji que quieras */
+}
+
+#applyBtn {
+  background: #d3d3d3;   /* gris claro */
+  color: #333;            /* texto más oscuro para contraste */
+  font-weight: 600;
+  padding: 12px 18px;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  flex: 1;               /* si está en un flex, ocupa el espacio disponible */
+  transition: background 0.2s;
+}
+
+#applyBtn:hover {
+  background: #c0c0c0;   /* ligeramente más oscuro al pasar el cursor */
+}
+
+
 
 /* Controls */
 .controls{
@@ -134,6 +153,109 @@ textarea{
   color:white;
   cursor:pointer;
 }
+
+.spin-button-wrapper {
+  display: flex;
+  justify-content: center;
+  margin-top: 16px;
+}
+
+.big-spin-btn {
+  background: var(--accent);
+  color: white;
+  font-size: 1.5rem;  /* más grande */
+  padding: 16px 28px;  /* más alto y ancho */
+  border-radius: 12px;
+  border: none;
+  cursor: pointer;
+  font-weight: 700;
+  width: 80%;  /* opcional: que ocupe casi todo el ancho */
+  max-width: 300px;
+}
+
+/* Modal de fondo */
+.modal {
+  display: none; /* oculto por defecto */
+  position: fixed;
+  z-index: 1000;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgba(0,0,0,0.5);
+  animation: fadeIn 0.3s ease;
+}
+
+/* Contenido del modal */
+.modal-content {
+  background-color: var(--card);
+  margin: 15% auto;
+  padding: 20px;
+  border-radius: 12px;
+  width: 80%;
+  max-width: 1020px;
+  text-align: center;
+  font-size: 1.3rem;
+  font-weight: 700;
+  animation: slideUp 0.4s ease;
+}
+
+/* Botón cerrar */
+.close {
+  color: #555;
+  float: right;
+  font-size: 1.5rem;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+/* Animaciones */
+@keyframes fadeIn { from {opacity:0} to {opacity:1} }
+@keyframes slideUp { from {transform: translateY(50px); opacity:0} to {transform: translateY(0); opacity:1} }
+
+#modalTitle {
+  font-size: 3rem;       /* tamaño del título “Resultado:” */
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+
+#modalText {
+  font-size: 6rem;         /* tamaño grande pero razonable */
+  font-weight: 700;
+  color: var(--accent);
+  margin: 0;
+  word-wrap: break-word;    /* evita que textos largos se salgan del cuadro */
+  line-height: 1.2;
+}
+
+@media (max-width: 480px) {
+  #modalText {
+    font-size: 1.5rem;
+  }
+}
+
+header {
+  text-align: center;
+  padding: 30px 10px; /* more vertical space for logo */
+}
+
+.logo-header {
+  max-width: 450px;   /* adjust as needed */
+  width: 80%;
+  height: auto;
+  display: inline-block;
+}
+
+.canvas-wrap {
+  position: relative;
+  width: 100%;
+  max-width: 640px;
+  margin: 30px 0 6px; /* extra top margin */
+  display: flex;
+  justify-content: center;
+}
+
 
 footer{
   margin-top:auto;
