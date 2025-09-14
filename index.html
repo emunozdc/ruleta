@@ -8,7 +8,7 @@
 </head>
 <body>
   <header>
-    <h1>🏊🏻‍♀️ RULETA CNB 🦦</h1>
+    <h1>🎡 Ruleta de Dinámicas</h1>
     <p class="hint">Escribe 1 opción por línea, pulsa <strong>Aplicar</strong> y luego <strong>Girar</strong>.</p>
   </header>
 
@@ -24,6 +24,8 @@
         <label class="small">Velocidad:
           <input id="speedRange" type="range" min="1" max="10" value="6" />
         </label>
+        <button id="saveDefaultBtn" title="Guarda en este navegador">💾 Guardar defecto</button>
+        <button id="exportBtn" title="Exporta opciones a un fichero">⬇️ Exportar</button>
         <input id="importFile" type="file" accept="application/json" style="display:none" />
         <button id="importBtn" title="Importa opciones desde fichero">⬆️ Importar</button>
       </div>
@@ -44,6 +46,7 @@
         <ul>
           <li>Pulsa <strong>Aplicar</strong> para cargar las opciones.</li>
           <li>Pulsa <strong>Girar</strong> para hacer la animación y ver el resultado.</li>
+          <li>Puedes <strong>Guardar defecto</strong> (localStorage) o exportar/importar JSON.</li>
         </ul>
       </details>
     </aside>
